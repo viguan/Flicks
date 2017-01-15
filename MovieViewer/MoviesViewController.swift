@@ -118,30 +118,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         tableView.reloadData()
     }
     
-    // This method updates filteredData based on the text in the Search Box
-    /*func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        print("I HAVE ENTERED THE SEARCHBAR")
-        if searchText.isEmpty {
-            print("did not enter else")
-            filteredData = movies
-        } else {
-            filteredData = movies?.filter({ (movie: NSDictionary) -> Bool in
-                if let title = movie["title"] as? String {
-                    if title.range(of: searchText, options: .caseInsensitive) != nil {
-                        print("true")
-                        return true
-                    } else {
-                        print("false")
-                        return false
-                    }
-                }
-                print("what")
-                return false
-            })
-        }
-        
-        tableView.reloadData()
-    }*/
+    // Methods to implement a cancel option for the search bar
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        self.searchBar.showsCancelButton = true
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        searchBar.text = ""
+        searchBar.resignFirstResponder()
+    }
+    
 
     // Implemeting the refresh icon called refreshControl
     func refreshControlAction(refreshControl: UIRefreshControl) {
