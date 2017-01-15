@@ -13,7 +13,7 @@ import MBProgressHUD
 class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var searchBar: UITableView!
+    @IBOutlet weak var searchBar: UISearchBar!
     
     var movies: [NSDictionary]?
     var filteredData: [NSDictionary]!    // Filtered movie titles
@@ -91,15 +91,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         let movie = filteredData![indexPath.row]
         let title = movie["title"] as! String
         
-        let overview = movie["overview"] as! String
+        // overview is too much~
+        //let overview = movie["overview"] as! String
         let posterPath = movie["poster_path"] as! String
         
         let baseUrl = "https://image.tmdb.org/t/p/w342"
 
         let imageUrl = URL(string: baseUrl + posterPath)
         
+        
         cell.titleLabel.text = title
-        cell.overviewLabel.text = overview
+        //cell.overviewLabel.text = overview
         cell.posterView.setImageWith(imageUrl!)
         
         print("row \(indexPath.row)")
