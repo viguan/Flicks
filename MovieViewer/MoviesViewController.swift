@@ -10,11 +10,13 @@ import UIKit
 import AFNetworking
 import MBProgressHUD
 
-class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class MoviesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
 
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var searchBar: UITableView!
     
     var movies: [NSDictionary]?
+    var filteredData: [NSDictionary]!    // Filtered movie titles
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,13 +43,17 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
             
             if let data = data {
                 if let dataDictionary = try! JSONSerialization.jsonObject(with: data, options: []) as? NSDictionary {
-                    print(dataDictionary)
-                    
                     self.movies = dataDictionary["results"] as? [NSDictionary]
+                    self.filteredData = self.movies
+                    
                     self.tableView.reloadData()
                 }
             }
         }
+        
+        searchBar.delegate = self
+        filteredData = movies
+        
         task.resume()
         
         // Initializing a refresh icon
@@ -63,21 +69,28 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int
     {
-        if let movies = movies {
-            return movies.count
+        if let filteredData = filteredData {
+            return filteredData.count
         } else {
             return 0
         }
-        
-        
+        /*if let movies = movies {
+            return movies.count
+        } else {
+            return 0
+        }*/
     }
     
+    /* Displays movie poster, movie name, and movie description
+       Also in part of imeplementing search bar functionality.
+    */
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell
     {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCell", for: indexPath) as! MovieCell
         
-        let movie = movies![indexPath.row]
+        let movie = filteredData![indexPath.row]
         let title = movie["title"] as! String
+        
         let overview = movie["overview"] as! String
         let posterPath = movie["poster_path"] as! String
         
@@ -89,11 +102,44 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         cell.overviewLabel.text = overview
         cell.posterView.setImageWith(imageUrl!)
         
-        //print("baseUrl \(posterPath)")
-        
         print("row \(indexPath.row)")
+
         return cell
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        filteredData = searchText.isEmpty ? movies : movies?.filter({ (movie: NSDictionary) -> Bool in
+            
+            return (movie["title"] as? String)?.range(of: searchText, options: .caseInsensitive) != nil
+        })
+        
+        tableView.reloadData()
+    }
+    
+    // This method updates filteredData based on the text in the Search Box
+    /*func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        print("I HAVE ENTERED THE SEARCHBAR")
+        if searchText.isEmpty {
+            print("did not enter else")
+            filteredData = movies
+        } else {
+            filteredData = movies?.filter({ (movie: NSDictionary) -> Bool in
+                if let title = movie["title"] as? String {
+                    if title.range(of: searchText, options: .caseInsensitive) != nil {
+                        print("true")
+                        return true
+                    } else {
+                        print("false")
+                        return false
+                    }
+                }
+                print("what")
+                return false
+            })
+        }
+        
+        tableView.reloadData()
+    }*/
 
     // Implemeting the refresh icon called refreshControl
     func refreshControlAction(refreshControl: UIRefreshControl) {
@@ -111,6 +157,7 @@ class MoviesViewController: UIViewController, UITableViewDataSource, UITableView
         task.resume()
     }
     
+
     
     
 }
