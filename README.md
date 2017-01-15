@@ -24,13 +24,13 @@ The following **optional** features are implemented:
 Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
 1. searchBar implementation (documentation was not very good)
-2. 
+2. more UI customization tutorials on CodePath
 
 ## Video Walkthrough 
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://imgur.com/a/ri2U3' title='Video Walkthrough' width='100' alt='Video Walkthrough' />
+<img src='http://i.imgur.com/7LuirDl.gif' title='Video Walkthrough' width='100' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
